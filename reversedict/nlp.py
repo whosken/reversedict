@@ -1,5 +1,15 @@
-import textblob
+
+
+import nltk
+try:
+    for package in ['brown','conll2000','punkt','wordnet']:
+        nltk.download(package)
+except:
+    pass
+
 from nltk.corpus import wordnet
+
+import textblob
 
 import stopwords
 
