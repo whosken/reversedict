@@ -31,11 +31,11 @@ python cli.py 'run fast'
 During the basic look up, the engine will attempt to extract the intended word through part-of-speech. To specify the part of speech, use `pos` argument.
 
 ```python
-reversedict.lookup('run fast', pos='vb')
+reversedict.lookup('run fast', pos='VB')
 ```
 
 or
 
 ```shell
-python cli.py --verbose 'run fast'
+python cli.py --pos='VB' 'run fast'
 ```
