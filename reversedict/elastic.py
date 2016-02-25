@@ -1,4 +1,5 @@
 import elasticsearch
+import elasticsearch.helper as helper
 import os
 
 HOST = os.environ.get('SEARCHBOX_URL')
