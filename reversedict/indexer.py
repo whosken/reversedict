@@ -80,5 +80,7 @@ def init_queue(indexed, seeds=None):
             if not is_not_indexed(term):
                 continue
             return term
-    yield queue.update, pop
+    def push(tokens):
+        queue.update(filter(is_not_indexed, tokens))
+    yield push, pop
     
