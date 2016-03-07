@@ -4,64 +4,81 @@ import collections
 import nlp
 import elastic
 
-DEFAULT_SEEDS = ['philosophy','science','art']
+DEFAULT_SEEDS = ['philosophy','science','art','health','emotion']
 
-def index_terms(seeds=None, max_count=100000):
+def index_terms(seeds=None, max_count=50000):
     '''
     Index words by their definitions and synonyms.
     Starts with a list of seed word, e.g. top 100 used terms.
     Index the words, queue words occured in definitions for
     indexing later. When dequeueing, pop the next most used word.
     '''
-    with connect_search() as index_term, indexed:
-        with init_queue(seeds) as push_queue, pop_queue:
+    with connect_search() as (index_term, indexed):
+        with init_queue(indexed, seeds) as (push_queue, pop_queue):
             term = pop_queue()
             while term:
                 print 'indexing', term
                 linked_terms = index_term(term)
                 push_queue(linked_terms)
-                print 'indexed', count
-                if max_count and len(indexed) >= max_count:
+                if max_count and max_count <= len(indexed):
                     break
                 term = pop_queue()
+        print 'indexed', len(indexed), 'terms'
     return True
-
-INDEX = 'reverse_dict'
 
 @contextlib.contextmanager
 def connect_search():
-    elastic.client.create(index=INDEX, ignore=400)
+    elastic.client.indices.create(index=elastic.SEARCH_INDEX, ignore=400)
     actions = {}
-    not_indexed = lambda t: t not in actions
     def index_term(term):
         '''
         Look up definitions and synonyms of term,
         then returns their tokens for indexing further
         '''
         definitions, synonyms = nlp.get_definitions_synonyms(term)
+        if not definitions:
+            return []
         doc = {'term':term,
                'definitions':definitions,
                'synonyms':synonyms}
         actions[term] = {'_op_type':'index',
-                         '_index':INDEX,
+                         '_index':elastic.SEARCH_INDEX,
                          '_type':'term',
                          'doc':doc
                          }
-        return set(filter(not_indexed, nlp.tokenize(*definitions + synonyms)))
+        actions_count = len(actions)
+        if actions_count > 5000 and actions_count % 5000 == 0:
+            commit_index_actions()
+        return nlp.tokenize(*definitions + synonyms)
+    
+    def commit_index_actions():
+        actionables = filter(None, actions.values())
+        results = elastic.helpers.parallel_bulk(elastic.client, actionables)
+        for is_success, response in results:
+            if not is_success:
+                print response
+        print 'committed', len(actionables), 'terms'; print
+        for term in actions:
+            actions[term] = None
+        return True
     
     try:
         yield index_term, actions.viewkeys()
     finally:
         if actions:
-            elastic.helper.parallel_bulk(elastic.client, actions.values())
+            commit_index_actions()
+            elastic.client.indices.refresh(index=elastic.SEARCH_INDEX)
 
 @contextlib.contextmanager
-def init_queue(seeds=None):
+def init_queue(indexed, seeds=None):
     queue = collections.Counter(seeds or DEFAULT_SEEDS)
+    is_not_indexed = lambda t: t not in indexed
     def pop():
         while queue:
-            term,_ = queue.most_common(1)
+            term,frequency = queue.most_common(1)[0]
             del queue[term]
+            if not is_not_indexed(term):
+                continue
             return term
     yield queue.update, pop
     
