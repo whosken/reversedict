@@ -1,5 +1,6 @@
 import elasticsearch
 import elasticsearch.helpers as helpers
+
 import os
 
 HOST = os.environ.get('SEARCHBOX_URL') or 'localhost:9200'
