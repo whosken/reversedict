@@ -6,7 +6,7 @@ import elastic
 
 DEFAULT_SEEDS = ['philosophy','science','art','health','emotion']
 
-def index_terms(seeds=None, max_count=50000):
+def index_terms(seeds=None, max_count=100000):
     '''
     Index words by their definitions and synonyms.
     Starts with a list of seed word, e.g. top 100 used terms.
@@ -42,6 +42,7 @@ def connect_search():
                'definitions':definitions,
                'synonyms':synonyms}
         actions[term] = {'_op_type':'index',
+                         '_id':hash(term),
                          '_index':elastic.SEARCH_INDEX,
                          '_type':'term',
                          'doc':doc
