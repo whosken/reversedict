@@ -22,10 +22,10 @@ def search(query):
 def get_definition_query(description, synonyms=None):
     query = {'match':{'definitions':{'query':description,
                                      'cutoff_frequency':0.001}}}
-    if True: # TODO: enable filter 
+    if not synonyms:
         return query
-    filters = {'match':{'synonyms':' '.join(synonyms)}}
-    return {'filtered':{'filter':filters}}
+    filters = {'terms':{'synonyms':synonyms}}
+    return {'filtered':{'filter':filters, 'query':query}}
 
 def get_synonym_query(description, synonyms=None):
     import nlp
