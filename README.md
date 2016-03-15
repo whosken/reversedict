@@ -9,8 +9,9 @@ Install
 -------
 
 ```shell
+# install elasticsearch via https://www.elastic.co/downloads/elasticsearch 
 pip install reversedict
-service elasticsearch start # assumes elasticsearch is installed
+service elasticsearch start
 python cli.py --index
 ```
 
@@ -28,4 +29,10 @@ or
 
 ```shell
 python cli.py 'run fast'
+```
+
+Synonym filtering
+
+```shell
+python cli.py 'run fast' --synonym sprint
 ```
