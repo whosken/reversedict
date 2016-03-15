@@ -10,7 +10,7 @@ Install
 
 ```shell
 pip install reversedict
-services elasticsearch start # assumes elasticsearch is installed
+service elasticsearch start # assumes elasticsearch is installed
 python cli.py --index
 ```
 
