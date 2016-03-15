@@ -4,13 +4,15 @@ if __name__ == '__main__':
     parser.add_argument('description', nargs='?', help='Rough description of intended word.')
     parser.add_argument('-s', '--synonym', nargs='+', help='Synonyms used to filter candidates.')
     parser.add_argument('-i', '--index', action='store_true', help='Index known terms.')
+    parser.add_argument('--seeds', nargs='+', help='Terms used to seed term indexing.')
+    parser.add_argument('--max_terms', type=int, default=5000, help='Index known terms.')
     args = parser.parse_args()
     
     import reversedict
     
     if args.index:
         import reversedict.indexer
-        reversedict.indexer.index_terms()
+        reversedict.indexer.index_terms(args.seeds, args.max_terms)
         raise SystemExit(1)
     
     if not args.description:
