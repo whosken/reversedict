@@ -16,7 +16,7 @@ class LazyClient(object):
         if not self._client:
             print 'connecting to', HOST
             if HOST:
-                self._client = elasticsearch.Elasticsearch([HOST], port=80)
+                self._client = elasticsearch.Elasticsearch([HOST], port=80, timeout=10)
             else:
                 self._client = elasticsearch.Elasticsearch(['localhost:9200'])
         return getattr(self._client, name)
