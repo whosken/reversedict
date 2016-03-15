@@ -6,7 +6,7 @@ import elastic
 
 DEFAULT_SEEDS = ['philosophy','science','art','health','emotion']
 
-def index_terms(seeds=None, max_count=100000):
+def index_terms(seeds=None, max_count=5000):
     '''
     Index words by their definitions and synonyms.
     Starts with a list of seed word, e.g. top 100 used terms.
@@ -48,7 +48,7 @@ def connect_search():
                          'doc':doc
                          }
         actions_count = len(actions)
-        if actions_count > 5000 and actions_count % 5000 == 0:
+        if actions_count > 1000 and actions_count % 1000 == 0:
             commit_index_actions()
         return nlp.tokenize(*definitions + synonyms)
     
@@ -72,15 +72,20 @@ def connect_search():
 
 @contextlib.contextmanager
 def init_queue(indexed, seeds=None):
-    queue = collections.Counter(seeds or DEFAULT_SEEDS)
+    seeds = seeds or DEFAULT_SEEDS
+    queue = collections.Counter()
     is_not_indexed = lambda t: t not in indexed
-    def pop():
+    def yield_terms():
+        while seeds:
+            yield seeds.pop(0)
         while queue:
-            term,frequency = queue.most_common(1)[0]
+            term,_ = queue.most_common(1)[0]
             del queue[term]
-            if not is_not_indexed(term):
-                continue
-            return term
+            yield term
+    def pop():
+        for term in yield_terms():
+            if is_not_indexed(term):
+                return term
     def push(tokens):
         queue.update(filter(is_not_indexed, tokens))
     yield push, pop
