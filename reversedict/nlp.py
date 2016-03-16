@@ -1,7 +1,8 @@
 import nltk
 try:
-    for package in ['brown','conll2000','punkt','wordnet']:
-        nltk.download(package)
+    packages = ['wordnet',
+                ]#'brown','conll2000','punkt','wordnet']
+    map(nltk.download, packages)
 except:
     pass
 
@@ -16,9 +17,8 @@ def lookup_word(term):
 
 def get_definitions_synonyms(term):
     word = lookup_word(term)
-    definitions = word.define()
-    synonyms = [l for s in word.get_synsets() for l in s.lemma_names()]
-    return definitions, synonyms
+    synonyms = {l for s in word.get_synsets() for l in s.lemma_names()}
+    return word.definitions, list(synonyms)
 
 def tokenize(*texts):
     blob = textblob.TextBlob('. '.join(texts))
