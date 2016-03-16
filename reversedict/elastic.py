@@ -22,3 +22,6 @@ class LazyClient(object):
         return getattr(self._client, name)
     
 client = LazyClient()
+
+def _delete(index=None):
+    return client.indices.delete(index=index or SEARCH_INDEX)

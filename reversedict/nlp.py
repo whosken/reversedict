@@ -1,7 +1,6 @@
 import nltk
 try:
-    packages = ['wordnet',
-                ]#'brown','conll2000','punkt','wordnet']
+    packages = ['brown','conll2000','punkt','wordnet']
     map(nltk.download, packages)
 except:
     pass

@@ -54,6 +54,8 @@ def connect_search():
     
     def commit_index_actions():
         actionables = filter(None, actions.values())
+        if not actionables:
+            return False
         results = elastic.helpers.bulk(elastic.client, actionables)
         for is_success, response in results:
             if not is_success:
