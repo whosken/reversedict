@@ -29,7 +29,6 @@ def index_terms(seeds=None, max_count=5000):
 
 @contextlib.contextmanager
 def connect_search():
-    #elastic.delete_index()
     elastic.create_index()
     actions = {}
     def index_term(term):
