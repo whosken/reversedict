@@ -1,5 +1,6 @@
 import contextlib
 import collections
+import time
 
 import nlp
 import elastic
@@ -28,7 +29,8 @@ def index_terms(seeds=None, max_count=5000):
 
 @contextlib.contextmanager
 def connect_search():
-    elastic.client.indices.create(index=elastic.SEARCH_INDEX, ignore=400)
+    #elastic.delete_index()
+    elastic.create_index()
     actions = {}
     def index_term(term):
         '''
@@ -49,28 +51,35 @@ def connect_search():
                          }
         actions_count = len(actions)
         if actions_count > 1000 and actions_count % 1000 == 0:
-            commit_index_actions()
+            retry_commit()
         return nlp.tokenize(*definitions + synonyms)
     
     def commit_index_actions():
         actionables = filter(None, actions.values())
         if not actionables:
             return False
-        results = elastic.helpers.bulk(elastic.client, actionables)
-        for is_success, response in results:
-            if not is_success:
-                print response
-        print 'committed', len(actionables), 'terms'; print
+        successes, errors = elastic.helpers.bulk(elastic.client, actionables)
+        if errors:
+            print errors
+        print 'committed', successes, 'terms'; print
         for term in actions:
             actions[term] = None
         return True
+    
+    def retry_commit():
+        for timeout in (0,10,20,30):
+            try:
+                return commit_index_actions()
+            except elastic.exceptions.ConnectionTimeout as error:
+                print 'errored', error, 'sleeping for', timeout
+                time.sleep(timeout)
     
     try:
         yield index_term, actions.viewkeys()
     finally:
         if actions:
-            commit_index_actions()
-            elastic.client.indices.refresh(index=elastic.SEARCH_INDEX)
+            retry_commit()
+            elastic.refresh_index()
 
 @contextlib.contextmanager
 def init_queue(indexed, seeds=None):

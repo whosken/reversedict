@@ -1,5 +1,6 @@
 import elasticsearch
 import elasticsearch.helpers as helpers
+import elasticsearch.exceptions as exceptions
 
 import os
 
@@ -16,12 +17,18 @@ class LazyClient(object):
         if not self._client:
             print 'connecting to', HOST
             if HOST:
-                self._client = elasticsearch.Elasticsearch([HOST], port=80, timeout=10)
+                self._client = elasticsearch.Elasticsearch([HOST], port=80, timeout=30)
             else:
                 self._client = elasticsearch.Elasticsearch(['localhost:9200'])
         return getattr(self._client, name)
     
 client = LazyClient()
 
-def _delete(index=None):
+def delete_index(index=None):
     return client.indices.delete(index=index or SEARCH_INDEX)
+
+def create_index(index=None):
+    return client.indices.create(index=index or SEARCH_INDEX, ignore=400)
+
+def refresh_index(index=None):
+    return client.indices.refresh(index=index or SEARCH_INDEX)
