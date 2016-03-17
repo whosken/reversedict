@@ -34,4 +34,4 @@ def get_synonym_query(description, synonyms=None):
 
 def parse_results(results):
     print 'found', results['hits'].get('total')
-    return (h['_source'] for h in results['hits'].get('hits',[]))
+    return (h['_source']['doc'] for h in results['hits'].get('hits',[]))

@@ -41,7 +41,7 @@
                     <i class="fa fa-bars"></i>
                 </button>
                 <a class="navbar-brand page-scroll" href="#page-top">
-                    <i class="fa fa-play-circle"></i> Reverse<span class="light">Dict</span>
+                    <i class="fa fa-book"></i> Reverse<span class="light">Dict</span>
                 </a>
             </div>
 
@@ -53,10 +53,10 @@
                         <a href="#page-top"></a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#tool">Tool</a>
+                        <a class="page-scroll" href="#about">About</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#about">About</a>
+                        <a class="page-scroll" href="#tool">Tool</a>
                     </li>
                     <li>
                         <a class="page-scroll" href="#download">Download</a>
@@ -79,8 +79,15 @@
                     <div class="col-md-8 col-md-offset-2">
                         <h1 class="brand-heading">Reverse<span class="light">Dict</span></h1>
                         <p class="intro-text">Tip-of-the-tongue? Look up words from their definitions.</p>
-                        <p>[search]</p>
-                        <a href="#tool" class="btn btn-circle page-scroll">
+                        <div class="input-group">
+                            <input id="searchOne" type="text" class="form-control" placeholder="Definition">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button" onclick="javascript:search('#searchOne');return;">
+                                    <i class="fa fa-search animated"></i>
+                                </button>
+                            </span>
+                        </div>
+                        <a href="#about" class="btn btn-circle page-scroll">
                             <i class="fa fa-angle-double-down animated"></i>
                         </a>
                     </div>
@@ -88,25 +95,6 @@
             </div>
         </div>
     </header>
-    
-    <!-- Tool Section -->
-    <section id="tool" class="container content-section text-center">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2">
-                <h2>Tool</h2>
-                <p>[search]</p>
-                <p>[results]</p>
-                <p><small>Find it useful? <a href="#contact" class="page-scroll">Help me</a> host this tool.</small></p>
-                <script type="text/javascript" src="js/reversedict.js"></script>
-                <script type="text/javascript">
-                    // TODO: api calls
-                </script>
-                <a href="#about" class="btn btn-circle page-scroll">
-                    <i class="fa fa-angle-double-down animated"></i>
-                </a>
-            </div>
-        </div>
-    </section>
 
     <!-- About Section -->
     <section id="about" class="container content-section text-center">
@@ -115,7 +103,39 @@
                 <h2>About</h2>
                 <p>Ever had that problem when you know of the concept yet can't recall the word? Thesaurus are usually pretty poor at this task because it's built to link individual words to each other. Not a rough description to a single word.</p>
                 <p>This is a solution built around <a href="https://wordnet.princeton.edu/">WordNet</a> through <a href="http://www.nltk.org">NLTK</a> and <a href="http://textblob.readthedocs.org/en/dev/">TextBlob</a>. It utilizes <a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf">Tf-idf</a> implemented by <a href="https://www.elastic.co/">Elasticsearch</a> to index each term by their definitions.</p>
-                <p>[blog post]</p>
+                <a href="#tool" class="btn btn-circle page-scroll">
+                    <i class="fa fa-angle-double-down animated"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Tool Section -->
+    <section id="tool" class="container content-section text-center">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2">
+                <h2>Tool</h2>
+                <div class="input-group">
+                    <input id="searchTwo" type="text" class="form-control" placeholder="Definition">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button" onclick="javascript:search('#searchTwo');return;">
+                            <i class="fa fa-search animated"></i>
+                        </button>
+                    </span>
+                </div>
+                <table class="table text-left" id="resultsTable">
+                    <caption>Top words with similar definitions</caption>
+                    <thead>
+                        <tr>
+                            <th>Word</th>
+                            <th>Top Definition(s)</th>
+                            <th>Top Synonyms(s)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resultsBody">
+                    </tbody>
+                </table>
+                <p><small>Find it useful? <a href="#contact" class="page-scroll">Help me</a> host this tool.</small></p>
                 <a href="#download" class="btn btn-circle page-scroll">
                     <i class="fa fa-angle-double-down animated"></i>
                 </a>
@@ -130,7 +150,6 @@
                 <div class="col-lg-8 col-lg-offset-2">
                     <h2>Download</h2>
                     <p>The repository can be accessed through PyPI or <a href="https://github.com/whosken/reversedict">Github</a>. They include the Python library, CLI, and this basic web service</p>
-                    <a href="https://github.com/whosken/reversedict" class="btn btn-default btn-lg"><i class="fa fa-github fa-fw"></i> <span class="network-name">Github</span></a>
                     <a href="#contact" class="btn btn-circle page-scroll">
                         <i class="fa fa-angle-double-down animated"></i>
                     </a>
@@ -181,6 +200,51 @@
 
     <!-- Custom Theme JavaScript -->
     <script src="js/grayscale.js"></script>
+    
+    <script type="text/javascript" src="js/reversedict.js"></script>
+    <script type="text/javascript">
+        var $resultsBody = $('#resultsBody');
+        
+        var scrollToResultsBody = function(){
+            $('html, body').animate({
+                scrollTop: $("#resultsTable").offset().top
+            }, 1500);
+        };
+        var displayResults = function(data){
+            $resultsBody.empty();
+            console.log(data);
+            var resultRows = $.map(data, createResultRow);
+            $resultsBody.html(resultRows.join(''));
+            scrollToResultsBody();
+        };
+        var createResultRow = function(result){
+            return '<tr><th scope="row"><a href="https://en.wiktionary.org/wiki/'+result.term+'" target="_blank">'+
+                result.term+'</a></th><td>'+
+                result.definitions.slice(0,5).join('<br/>')+'</td><td>'+
+                result.synonyms.slice(0,10).join(', ')+'</td></tr>';
+        };
+        
+        var search = function(searchId){
+            var description = $(searchId).val();
+            console.log(searchId, description);
+            ReverseDict.lookup(description, displayResults);
+        };
+        
+        $(document).ready(function(){
+            $("#searchOne").bind("keypress",function(event){
+                if(event.which==13){ // Enter
+                    event.preventDefault();
+                    search('#searchOne');
+                }
+            });
+            $("#searchTwo").bind("keypress",function(event){
+                if(event.which==13){ // Enter
+                    event.preventDefault();
+                    search('#searchTwo');
+                }
+            });
+        });
+    </script>
 
 </body>
 
