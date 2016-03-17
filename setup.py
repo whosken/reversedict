@@ -1,7 +1,7 @@
 import setuptools
 
 setuptools.setup(name='reversedict',
-                 version='0.2.1',
+                 version='0.2.1.1',
                  description='Look up words by definition',
                  url='http://github.com/whosken/reversedict',
                  author='Ken Hu',
