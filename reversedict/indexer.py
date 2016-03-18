@@ -1,20 +1,23 @@
 import contextlib
 import collections
 import time
+import random
 
 import nlp
 import elastic
 
 DEFAULT_SEEDS = ['philosophy','science','art','health','emotion']
 
-def index_terms(seeds=None, max_count=5000):
+def index_terms(seeds=None, max_count=10000):
     '''
     Index words by their definitions and synonyms.
     Starts with a list of seed word, e.g. top 100 used terms.
     Index the words, queue words occured in definitions for
     indexing later. When dequeueing, pop the next most used word.
     '''
-    with connect_search() as (index_term, indexed):
+    seeds = seeds if len(seeds) <= max_count else random.sample(seeds, max_count)
+    print 'using seeds, e.g', ', '.join(seeds[:10])
+    with connect_index() as (index_term, indexed):
         with init_queue(indexed, seeds) as (push_queue, pop_queue):
             term = pop_queue()
             while term:
@@ -28,7 +31,8 @@ def index_terms(seeds=None, max_count=5000):
     return True
 
 @contextlib.contextmanager
-def connect_search():
+def connect_index():
+    #elastic.delete_index()
     elastic.create_index()
     actions = {}
     def index_term(term):

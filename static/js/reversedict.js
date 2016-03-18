@@ -23,6 +23,6 @@ ReverseDict = {
     },
     
     cleanTerm:function(term){
-        return term.replace(/_/g,' ').replace(/-/g,' ');
+        return term.replace(/_/g,' ');
     },
 };
