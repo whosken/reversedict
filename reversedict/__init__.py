@@ -10,7 +10,7 @@ def lookup(description, synonyms=None):
     query = {'bool':{'must':get_definition_query(description),
                      'should':get_synonym_query(description, synonyms),
                      'minimum_should_match':0,
-                     'boost':1.5}}
+                     'boost':1.1}}
     return search(query)
 
 def search(query):
