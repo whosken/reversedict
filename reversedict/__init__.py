@@ -1,34 +1,29 @@
 import elastic
+import nlp
 
 def lookup(description, synonyms=None):
     '''
     Look up words by their definitions
     using the indexed terms and their synonyms.
     '''
-    return (search(get_definition_query(description, synonyms))
-            or search(get_synonym_query(description, synonyms))
-            )
+    description = nlp.correct(description)
+    query = {'bool':{'must':get_definition_query(description),
+                     'should':get_synonym_query(description, synonyms),
+                     'minimum_should_match':0,
+                     'boost':1.5}}
+    return search(query)
 
 def search(query):
     print 'searching', query
-    try:
-        results = elastic.client.search(index=elastic.SEARCH_INDEX, 
-                                        body={'query':query})
-    except Exception as error:
-        print error.info
-        raise
+    results = elastic.client.search(index=elastic.SEARCH_INDEX, body={'query':query})
     return list(parse_results(results))
 
 def get_definition_query(description, synonyms=None):
-    query = {'match':{'definitions':{'query':description,
+    query = {'match':{'definitions':{'query':unicode(description),
                                      'cutoff_frequency':0.001}}}
-    if not synonyms:
-        return query
-    filters = {'terms':{'synonyms':synonyms}}
-    return {'filtered':{'filter':filters, 'query':query}}
+    return query
 
 def get_synonym_query(description, synonyms=None):
-    import nlp
     tokens = nlp.tokenize(description) + (synonyms or [])
     return {'match':{'synonyms':{'query':tokens, 'operator':'or'}}}
 

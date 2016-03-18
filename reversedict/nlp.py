@@ -19,6 +19,12 @@ def get_definitions_synonyms(term):
     synonyms = {l for s in word.get_synsets() for l in s.lemma_names()}
     return word.definitions, list(synonyms)
 
-def tokenize(*texts):
-    blob = textblob.TextBlob('. '.join(texts))
+def join(*texts):
+    return textblob.TextBlob('. ').join(texts)
+
+def tokenize(text):
+    blob = textblob.TextBlob(text) if not isinstance(text, textblob.TextBlob) else text
     return filter(is_not_stopword, blob.words)
+
+def correct(text):
+    return textblob.TextBlob(text).correct()

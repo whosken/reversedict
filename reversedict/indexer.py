@@ -57,7 +57,7 @@ def connect_index(reset=False):
         actions_count = len(actions)
         if actions_count > 1000 and actions_count % 1000 == 0:
             retry_commit()
-        return nlp.tokenize(*definitions + synonyms)
+        return nlp.tokenize(nlp.join(*definitions + synonyms))
     
     def commit_index_actions():
         actionables = filter(None, actions.values())
