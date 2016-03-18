@@ -23,9 +23,8 @@ def reversedict_lookup(description=None):
 
 
 @app.route('/')
-@app.route('/<description>')
-def index(description=None):
-    return flask.render_template('index.html', description=description)
+def index():
+    return flask.render_template('index.html')
 
 @app.route('/js/<path:file_path>')
 def send_js(file_path):
