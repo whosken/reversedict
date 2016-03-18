@@ -249,6 +249,12 @@
                     search('#searchTwo');
                 }
             });
+            
+            {% if description %}
+            $("#searchOne").val('{{description}}');
+            $("#searchTwo").val('{{description}}');
+            search('#searchTwo');
+            {% endif %}
         });
     </script>
 
