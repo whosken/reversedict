@@ -82,7 +82,7 @@
                         <div class="input-group">
                             <input id="searchOne" type="text" class="form-control" placeholder="Definition">
                             <span class="input-group-btn">
-                                <button class="btn btn-default" type="button" onclick="javascript:search('#searchOne');return;">
+                                <button class="btn btn-default search-btn" type="button" onclick="javascript:search('#searchOne');return;">
                                     <i class="fa fa-search animated"></i>
                                 </button>
                             </span>
@@ -118,7 +118,7 @@
                 <div class="input-group">
                     <input id="searchTwo" type="text" class="form-control" placeholder="Definition">
                     <span class="input-group-btn">
-                        <button class="btn btn-default" type="button" onclick="javascript:search('#searchTwo');return;">
+                        <button class="btn btn-default search-btn" type="button" onclick="javascript:search('#searchTwo');return;">
                             <i class="fa fa-search animated"></i>
                         </button>
                     </span>
@@ -213,7 +213,7 @@
         
         var scrollToResultsBody = function(){
             $('html, body').animate({
-                scrollTop: $("#resultsTable").offset().top
+                scrollTop: $("#resultsTable").offset().top - 50
             }, 1500);
         };
         var displayResults = function(data){
@@ -222,6 +222,7 @@
             var resultRows = $.map(data, createResultRow);
             $resultsBody.html(resultRows.join(''));
             scrollToResultsBody();
+            setSearchButtons();
         };
         var createResultRow = function(result){
             return '<tr><th scope="row"><a href="https://en.wiktionary.org/wiki/'+result.term+'" target="_blank">'+
@@ -229,8 +230,18 @@
                 result.definitions.slice(0,5).join('<br/>')+'</td><td>'+
                 result.synonyms.slice(0,10).join(', ')+'</td></tr>';
         };
+        var setSearchButtons = function(){
+            $('.search-btn').html('<i class="fa fa-search animated"></i>');
+            $('.search-btn').removeAttr('disabled');
+            
+        };
+        var spinSearchButtons = function(){
+            $('.search-btn').html('<i class="fa fa-spinner animated"></i>');
+            $('.search-btn').attr('disabled','disabled');
+        };
         
         var search = function(searchId){
+            spinSearchButtons();
             var description = $(searchId).val();
             console.log(searchId, description);
             ReverseDict.lookup(description, displayResults);
