@@ -7,10 +7,12 @@ def lookup(description, synonyms=None):
     using the indexed terms and their synonyms.
     '''
     description = nlp.correct(description)
-    query = {'bool':{'must':get_definition_query(description),
-                     'should':get_synonym_query(description, synonyms),
-                     'minimum_should_match':0,
-                     'boost':1.1}}
+    query = {'bool':{'must':get_definition_query(description)}}
+    synonym_query = get_synonym_query(description, synonyms)
+    if synonym_query:
+        query['bool']['should'] = synonym_query
+        query['bool']['minimum_should_match'] = 0
+        query['bool']['boost'] = 1.2
     return search(query)
 
 def search(query):
@@ -25,6 +27,8 @@ def get_definition_query(description, synonyms=None):
 
 def get_synonym_query(description, synonyms=None):
     tokens = nlp.tokenize(description) + (synonyms or [])
+    if not tokens:
+        return None
     return {'match':{'synonyms':{'query':tokens, 'operator':'or'}}}
 
 def parse_results(results):
