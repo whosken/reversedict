@@ -13,4 +13,10 @@ def load():
 
 def get_is_not_stopword():
     stopword_list = load()
-    return lambda t: not stopword_list or t.lower() not in stopword_list
+    def is_not_stopword(term):
+        if term.isnumeric():
+            return False
+        if not stopword_list:
+            return True
+        return term.lower() not in stopword_list
+    return is_not_stopword

@@ -9,15 +9,19 @@ if __name__ == '__main__':
     parser.add_argument('-i', '--index', action='store_true', help='Index known terms.')
     parser.add_argument('--seeds', nargs='+', help='Terms used to seed term indexing.')
     parser.add_argument('--seeds-file', help='Path to comma-separated seeds')
-    parser.add_argument('--max-terms', type=int, default=5000, help='Index known terms.')
+    parser.add_argument('--max-words', type=int, default=10000, help='Index known terms.')
+    parser.add_argument('--reset-dict', action='store_true', default=False, help='Delete existing dictionary.')
     args = parser.parse_args()
     
     import reversedict
     
     if args.index:
+        import time
+        print 'indexing', args.max_words, 'words'
+        time.sleep(1)
         import reversedict.indexer
         seeds = read_seeds_file(args.seeds_file) if args.seeds_file else args.seeds
-        reversedict.indexer.index_terms(seeds, args.max_terms)
+        reversedict.indexer.index_terms(seeds, args.max_words, args.reset_dict)
         raise SystemExit(1)
     
     if not args.description:
