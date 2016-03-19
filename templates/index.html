@@ -210,6 +210,9 @@
     <script type="text/javascript" src="js/reversedict.js"></script>
     <script type="text/javascript">
         var $resultsBody = $('#resultsBody');
+        var $searchOne = $('#searchOne');
+        var $searchTwo = $('#searchTwo');
+        var $searchButtons = $('.search-btn');
         
         var scrollToResultsBody = function(){
             $('html, body').animate({
@@ -231,13 +234,17 @@
                 result.synonyms.slice(0,10).join(', ')+'</td></tr>';
         };
         var resetSearchButtons = function(){
-            $('.search-btn').html('<i class="fa fa-search animated"></i>');
-            $('.search-btn').removeAttr('disabled');
+            $searchButtons.html('<i class="fa fa-search animated"></i>');
+            $searchButtons.removeAttr('disabled');
             
         };
         var spinSearchButtons = function(){
-            $('.search-btn').html('<i class="fa fa-spinner animated"></i>');
-            $('.search-btn').attr('disabled','disabled');
+            $searchButtons.html('<i class="fa fa-spinner animated"></i>');
+            $searchButtons.attr('disabled','disabled');
+        };
+        var setSearchBoxValue = function(description){
+            $searchOne.val(description);
+            $searchTwo.val(description);
         };
         
         var search = function(searchId){
@@ -245,17 +252,18 @@
             var description = $(searchId).val();
             console.log(searchId, description);
             ReverseDict.lookup(description, displayResults);
+            setSearchBoxValue(description);
             location.hash = '#'+description;
         };
         
         $(document).ready(function(){
-            $("#searchOne").bind("keypress",function(event){
+            $searchOne.bind("keypress",function(event){
                 if(event.which==13){ // Enter
                     event.preventDefault();
                     search('#searchOne');
                 }
             });
-            $("#searchTwo").bind("keypress",function(event){
+            $searchTwo.bind("keypress",function(event){
                 if(event.which==13){ // Enter
                     event.preventDefault();
                     search('#searchTwo');
@@ -263,9 +271,8 @@
             });
             
             if(location.hash){
-                var query = location.hash.slice(1)
-                $("#searchOne").val(query);
-                $("#searchTwo").val(query);
+                var query = location.hash.slice(1);
+                setSearchBoxValue(query)
                 search('#searchTwo');
             }
         });
