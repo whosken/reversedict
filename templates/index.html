@@ -9,7 +9,7 @@
     <meta name="description" content="Tip-of-the-tongue? Look up words from their definitions.">
     <meta name="author" content="Ken Hu">
 
-    <title>ReverseDict: Look up words from their definitions</title>
+    <title>ReverseDict: Lookup words from their definitions</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -78,7 +78,7 @@
                 <div class="row">
                     <div class="col-md-8 col-md-offset-2">
                         <h1 class="brand-heading">Reverse<span class="light">Dict</span></h1>
-                        <p class="intro-text">Tip-of-the-tongue? Look up words from their definitions.</p>
+                        <p class="intro-text">Tip-of-the-tongue? Lookup words from their definitions.</p>
                         <div class="input-group">
                             <input id="searchOne" type="text" class="form-control" placeholder="Definition">
                             <span class="input-group-btn">
@@ -101,8 +101,8 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2">
                 <h2>About</h2>
-                <p>Ever had that problem when you know of the concept yet can't recall the word? Thesaurus are usually pretty poor at this task because it's built to link individual words to each other. Not a rough description to a single word.</p>
-                <p>This is a solution built around <a href="https://wordnet.princeton.edu/">WordNet</a> through <a href="http://www.nltk.org">NLTK</a> and <a href="http://textblob.readthedocs.org/en/dev/">TextBlob</a>. It utilizes <a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf">Tf-idf</a> implemented by <a href="https://www.elastic.co/">Elasticsearch</a> to index each term by their definitions.</p>
+                <p>Ever had that problem when you know of the concept yet can't recall the word? Thesaurus are usually pretty poor at this task, because it's built to link individual words to each other, instead of definitions to a single word.</p>
+                <p>This solution is built from <a href="https://wordnet.princeton.edu/" target="_blank">WordNet</a> through <a href="http://www.nltk.org" target="_blank">NLTK</a> and <a href="http://textblob.readthedocs.org/en/dev/" target="_blank">TextBlob</a>. It utilizes <a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf" target="_blank">Tf-idf</a> implemented by <a href="https://www.elastic.co/" target="_blank">Elasticsearch</a> to index each word by their definitions.</p>
                 <a href="#tool" class="btn btn-circle page-scroll">
                     <i class="fa fa-angle-double-down animated"></i>
                 </a>
@@ -135,7 +135,7 @@
                     <tbody id="resultsBody">
                     </tbody>
                 </table>
-                <p><small>Find it useful? <a href="https://donorbox.org/reversedict" class="page-scroll">Help me</a> host this tool.</small></p>
+                <p><small>Find it useful? <a href="https://donorbox.org/reversedict" target="_blank">Help me</a> host this tool.</small></p>
                 <a href="#download" class="btn btn-circle page-scroll">
                     <i class="fa fa-angle-double-down animated"></i>
                 </a>
@@ -150,10 +150,10 @@
                 <div class="col-lg-8 col-lg-offset-2">
                     <h2>Download</h2>
                     <p>
-                        The Python library is available on <a href="https://pypi.python.org/pypi/reversedict/" class="btn btn-default btn-sm">PyPI</a>. <br/>Install via <code>pip install reversedict</code>.
+                        The Python library is available on <a href="https://pypi.python.org/pypi/reversedict/" class="btn btn-default btn-sm" target="_blank">PyPI</a>. <br/>Install via <code>pip install reversedict</code>.
                     </p>
                     <p>
-                        The code is also available on <a href="https://github.com/whosken/reversedict" class="btn btn-default btn-sm">Github</a>. <br/>It contains the library, CLI, and this basic web service.
+                        The code is also available on <a href="https://github.com/whosken/reversedict" class="btn btn-default btn-sm" target="_blank">Github</a>. <br/>It contains the library, CLI, and this basic web service.
                     </p>
                     <a href="#contact" class="btn btn-circle page-scroll">
                         <i class="fa fa-angle-double-down animated"></i>
@@ -173,13 +173,19 @@
                 </p>
                 <ul class="list-inline banner-social-buttons">
                     <li>
-                        <a href="http://whosbacon.com" class="btn btn-default btn-lg"><i class="fa fa-home fa-fw"></i> <span class="network-name">Home</span></a>
+                        <a href="http://whosbacon.com" class="btn btn-default btn-lg" target="_blank">
+                            <i class="fa fa-home fa-fw"></i> <span class="network-name">Home</span>
+                        </a>
                     </li>
                     <li>
-                        <a href="https://twitter.com/whosbacon" class="btn btn-default btn-lg"><i class="fa fa-twitter fa-fw"></i> <span class="network-name">Twitter</span></a>
+                        <a href="https://twitter.com/whosbacon" class="btn btn-default btn-lg" target="_blank">
+                            <i class="fa fa-twitter fa-fw"></i> <span class="network-name">Twitter</span>
+                        </a>
                     </li>
                     <li>
-                        <a href="https://github.com/whosbacon" class="btn btn-default btn-lg"><i class="fa fa-github fa-fw"></i> <span class="network-name">Github</span></a>
+                        <a href="https://github.com/whosbacon" class="btn btn-default btn-lg" target="_blank">
+                            <i class="fa fa-github fa-fw"></i> <span class="network-name">Github</span>
+                        </a>
                     </li>
                 </ul>
             </div>
@@ -190,8 +196,8 @@
     <footer>
         <div class="container text-center">
             <p>Copyright &copy; Ken Hu 2016</p>
-            <p>Template by <a href="http://startbootstrap.com/">Start Bootstrap</a></p>
-            <p>Photos from <a href="https://unsplash.com/">Unsplash</a></p>
+            <p>Template by <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
+            <p>Photos from <a href="https://unsplash.com/" target="_blank">Unsplash</a></p>
         </div>
     </footer>
 
