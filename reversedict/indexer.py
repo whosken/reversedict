@@ -15,7 +15,8 @@ def index_terms(seeds=None, max_count=10000, reset_index=False):
     Index the words, queue words occured in definitions for
     indexing later. When dequeueing, pop the next most used word.
     '''
-    seeds = seeds if len(seeds) <= max_count else random.sample(seeds, max_count)
+    if max_count and len(seeds) <= max_count:
+        seeds = random.sample(seeds, max_count)
     print 'using seeds, e.g', ', '.join(seeds[:10])
     with connect_index(reset_index) as (index_term, indexed):
         with init_queue(indexed, seeds) as (push_queue, pop_queue):
