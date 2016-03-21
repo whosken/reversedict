@@ -25,7 +25,7 @@ class LazyClient(object):
 client = LazyClient()
 
 def delete_index(index=None):
-    return client.indices.delete(index=index or SEARCH_INDEX)
+    return client.indices.delete(index=index or SEARCH_INDEX, ignore=404)
 
 def create_index(index=None):
     return client.indices.create(index=index or SEARCH_INDEX, ignore=400)
