@@ -17,10 +17,12 @@ if __name__ == '__main__':
     
     if args.index:
         import time
-        print 'indexing', args.max_words, 'words'
+        print 'indexing', args.max_words or 'all linked', 'words'
         time.sleep(1)
         import reversedict.indexer
-        seeds = read_seeds_file(args.seeds_file) if args.seeds_file else args.seeds
+        seeds = args.seeds
+        if args.seeds_file:
+            seeds += read_seeds_file(args.seeds_file)
         reversedict.indexer.index_terms(seeds, args.max_words, args.reset_dict)
         raise SystemExit(1)
     
