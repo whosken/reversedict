@@ -56,7 +56,7 @@
                         <a class="page-scroll" href="#about">About</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#tool">Tool</a>
+                        <a class="page-scroll" href="#dictionary">Dictionary</a>
                     </li>
                     <li>
                         <a class="page-scroll" href="#download">Download</a>
@@ -101,20 +101,20 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2">
                 <h2>About</h2>
-                <p>Ever had that problem when you know of the concept yet can't recall the word? Thesaurus are usually pretty poor at this task, because it's built to link individual words to each other, instead of definitions to a single word.</p>
-                <p>This solution is built from <a href="https://wordnet.princeton.edu/" target="_blank">WordNet</a> through <a href="http://www.nltk.org" target="_blank">NLTK</a> and <a href="http://textblob.readthedocs.org/en/dev/" target="_blank">TextBlob</a>. It utilizes <a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf" target="_blank">Tf-idf</a> implemented by <a href="https://www.elastic.co/" target="_blank">Elasticsearch</a> to index each word by their definitions.</p>
-                <a href="#tool" class="btn btn-circle page-scroll">
+                <p>Ever had that problem when you know of the concept yet cannot recall the word? Thesaurus is a usually pretty poor solution, because it's built to link individual words to each other, instead of definitions to words. This reverse dictionary is <em>indexed by the definitions</em>. This enables us to lookup words simply from a rough description.</p>
+                <p><small>The dictionary was loaded from <a href="https://wordnet.princeton.edu/" target="_blank">WordNet</a> through <a href="http://www.nltk.org" target="_blank">NLTK</a> and <a href="http://textblob.readthedocs.org/en/dev/" target="_blank">TextBlob</a>. It utilizes <a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf" target="_blank">Tf-idf</a> implemented by <a href="https://www.elastic.co/" target="_blank">Elasticsearch</a> to match definitions to their words.</small></p>
+                <a href="#dictionary" class="btn btn-circle page-scroll">
                     <i class="fa fa-angle-double-down animated"></i>
                 </a>
             </div>
         </div>
     </section>
     
-    <!-- Tool Section -->
-    <section id="tool" class="container content-section text-center">
+    <!-- Dictionary Section -->
+    <section id="dictionary" class="container content-section text-center">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2">
-                <h2>Tool</h2>
+                <h2>Dictionary</h2>
                 <div class="input-group">
                     <input id="searchTwo" type="text" class="form-control" placeholder="Definition">
                     <span class="input-group-btn">
@@ -123,8 +123,7 @@
                         </button>
                     </span>
                 </div>
-                <table class="table text-left" id="resultsTable">
-                    <caption>Top words with similar definitions</caption>
+                <table class="table text-left hidden" id="resultsTable">
                     <thead>
                         <tr>
                             <th>Word</th>
@@ -135,7 +134,6 @@
                     <tbody id="resultsBody">
                     </tbody>
                 </table>
-                <p><small>Find it useful? <a href="https://donorbox.org/reversedict" target="_blank">Help me</a> host this tool.</small></p>
                 <a href="#download" class="btn btn-circle page-scroll">
                     <i class="fa fa-angle-double-down animated"></i>
                 </a>
@@ -215,6 +213,7 @@
     
     <script type="text/javascript" src="js/reversedict.js"></script>
     <script type="text/javascript">
+        var $resultsTable = $('#resultsTable');
         var $resultsBody = $('#resultsBody');
         var $searchOne = $('#searchOne');
         var $searchTwo = $('#searchTwo');
@@ -226,9 +225,12 @@
             }, 1500);
         };
         var displayResults = function(data){
+            $resultsTable.removeClass('hidden');
             $resultsBody.empty();
             console.log(data);
             var resultRows = $.map(data, createResultRow);
+            resultRows.splice(Math.min(5, resultRows.length),
+                              0,createDonateRow());
             $resultsBody.html(resultRows.join(''));
             scrollToResultsBody();
             resetSearchButtons();
@@ -238,6 +240,9 @@
                 result.term+'</a></th><td>'+
                 result.definitions.slice(0,5).join('<br/>')+'</td><td>'+
                 result.synonyms.slice(0,10).join(', ')+'</td></tr>';
+        };
+        var createDonateRow = function(){
+            return '<tr><td colspan="3" class="text-center"><em>Was it useful? <a href="https://donorbox.org/reversedict" target="_blank">Help me</a> host this tool.</em></td></tr>';
         };
         var resetSearchButtons = function(){
             $searchButtons.html('<i class="fa fa-search animated"></i>');
