@@ -8,7 +8,7 @@ This solution is built from [WordNet](https://wordnet.princeton.edu/) through [N
 Install
 ------
 
-```python
+```shell
 # install elasticsearch via https://www.elastic.co/downloads/elasticsearch 
 git clone git@github.com:whosken/reversedict.git
 cd reversedict
