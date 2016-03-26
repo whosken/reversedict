@@ -6,12 +6,13 @@ Ever had that problem when you know of the concept yet can't recall the word? Th
 This solution is built from [WordNet](https://wordnet.princeton.edu/) through [NLTK](http://www.nltk.org) and [TextBlob](http://textblob.readthedocs.org/en/dev/). It utilizes [tfidf](https://en.wikipedia.org/wiki/Tf%E2%80%93idf) implemented by [Elasticsearch](https://www.elastic.co/) to index each word by their definitions.
 
 Install
--------
+------
 
-```shell
+```python
 # install elasticsearch via https://www.elastic.co/downloads/elasticsearch 
-pip install reversedict
-service elasticsearch start
+git clone git@github.com:whosken/reversedict.git
+cd reversedict
+pip install -r requirements.txt
 python cli.py --index
 ```
 
