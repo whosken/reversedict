@@ -62,6 +62,9 @@
                         <a class="page-scroll" href="#download">Download</a>
                     </li>
                     <li>
+                        <a class="page-scroll" href="#donate">Donate</a>
+                    </li>
+                    <li>
                         <a class="page-scroll" href="#contact">Contact</a>
                     </li>
                 </ul>
@@ -87,9 +90,6 @@
                                 </button>
                             </span>
                         </div>
-                        <a href="#about" class="btn btn-circle page-scroll">
-                            <i class="fa fa-angle-double-down animated"></i>
-                        </a>
                     </div>
                 </div>
             </div>
@@ -103,9 +103,6 @@
                 <h2>About</h2>
                 <p>Ever had that problem when you know of the concept yet cannot recall the word? Thesaurus is a usually pretty poor solution, because it's built to link individual words to each other, instead of definitions to words. This reverse dictionary is <em>indexed by the definitions</em>. This enables us to lookup words simply from a rough description.</p>
                 <p><small>The dictionary was loaded from <a href="https://wordnet.princeton.edu/" target="_blank">WordNet</a> through <a href="http://www.nltk.org" target="_blank">NLTK</a> and <a href="http://textblob.readthedocs.org/en/dev/" target="_blank">TextBlob</a>. It utilizes <a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf" target="_blank">Tf-idf</a> implemented by <a href="https://www.elastic.co/" target="_blank">Elasticsearch</a> to match definitions to their words.</small></p>
-                <a href="#dictionary" class="btn btn-circle page-scroll">
-                    <i class="fa fa-angle-double-down animated"></i>
-                </a>
             </div>
         </div>
     </section>
@@ -134,9 +131,6 @@
                     <tbody id="resultsBody">
                     </tbody>
                 </table>
-                <a href="#download" class="btn btn-circle page-scroll">
-                    <i class="fa fa-angle-double-down animated"></i>
-                </a>
             </div>
         </div>
     </section>
@@ -153,10 +147,18 @@
                     <p>
                         The code is also available on <a href="https://github.com/whosken/reversedict" class="btn btn-default btn-sm" target="_blank">Github</a>. <br/>It contains the library, CLI, and this basic web service.
                     </p>
-                    <a href="#contact" class="btn btn-circle page-scroll">
-                        <i class="fa fa-angle-double-down animated"></i>
-                    </a>
                 </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Donate Section -->
+    <section id="donate" class="container content-section text-center">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2">
+                <h2>Donate</h2>
+                <p>The monthly hosting cost is $16: $9 for the search engine (Seachly) and $7 for the website (Heroku). Please help me keep this tool running. <em>You are my only hope.</em></p>
+                <a href="https://donorbox.org/reversedict" class="btn btn-default btn-lg" target="_blank">Donate</a>
             </div>
         </div>
     </section>
@@ -242,7 +244,7 @@
                 result.synonyms.slice(0,10).join(', ')+'</td></tr>';
         };
         var createDonateRow = function(){
-            return '<tr><td colspan="3" class="text-center"><em>Was it useful? <a href="https://donorbox.org/reversedict" target="_blank">Help me</a> host this tool.</em></td></tr>';
+            return '<tr><td colspan="3" class="text-center"><em>Was it useful? <a href="#donate" class="page-scroll">Help me</a> host this tool.</em></td></tr>';
         };
         var resetSearchButtons = function(){
             $searchButtons.html('<i class="fa fa-search animated"></i>');
