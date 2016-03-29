@@ -20,7 +20,7 @@ if __name__ == '__main__':
         print 'indexing', args.max_words or 'all linked', 'words'
         time.sleep(1)
         import reversedict.indexer
-        seeds = args.seeds
+        seeds = args.seeds or []
         if args.seeds_file:
             seeds += read_seeds_file(args.seeds_file)
         reversedict.indexer.index_terms(seeds, args.max_words, args.reset_dict)
