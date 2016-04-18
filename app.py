@@ -20,10 +20,11 @@ def reversedict_lookup(description=None):
         return flask.redirect(flask.url_for('instruction'))
     synonyms = flask.request.form.get('synonyms') or flask.request.args.getlist('synonym')
     results = reversedict.lookup(description, synonyms)
-    if flask.request.args.get('callback'): # JSONP support
-        return '{}({});'.format(flask.request.args.get('callback'), 
-                                json.dumps(suggestions=results))
-    return flask.jsonify(suggestions=results)
+    if not flask.request.args.get('callback'):
+        return flask.jsonify(suggestions=results)
+    return '{}({});'.format(flask.request.args.get('callback'),
+                            json.dumps({'suggestions':results}))
+    
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', 
