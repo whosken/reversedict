@@ -11,7 +11,7 @@ ReverseDict = {
         };
         
         $.ajax({
-            url:'http://reversedict.whosbacon.com/lookup/'+description,
+            url:'https://reversedict.herokuapp.com/lookup/'+description,
             dataType:'jsonp',
             contentType:'application/json',
             jsonpCallback:'ReverseDict.jsonpCallback'
