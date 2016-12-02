@@ -4,7 +4,7 @@ import elasticsearch.exceptions as exceptions
 
 import os
 
-HOST = os.environ.get('SEARCHBOX_URL')
+HOST = os.environ.get('ELASTICSEARCH') or 'localhost:9200'
 SEARCH_INDEX = 'reverse_dict'
 
 class LazyClient(object):
