@@ -4,7 +4,7 @@ import elasticsearch.exceptions as exceptions
 
 import os
 
-HOST = os.environ.get('ELASTICSEARCH') or 'localhost:9200'
+HOST = os.environ.get('ELASTICSEARCH')
 SEARCH_INDEX = 'reverse_dict'
 
 class LazyClient(object):
@@ -17,7 +17,7 @@ class LazyClient(object):
         if not self._client:
             print 'connecting to', HOST
             if HOST:
-                self._client = elasticsearch.Elasticsearch([HOST], port=80, timeout=30)
+                self._client = elasticsearch.Elasticsearch([HOST], connection_class=elasticsearch.RequestsHttpConnection)
             else:
                 self._client = elasticsearch.Elasticsearch(['localhost:9200'])
         return getattr(self._client, name)
