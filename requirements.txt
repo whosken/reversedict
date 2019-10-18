@@ -3,7 +3,7 @@ Flask==0.10.1
 itsdangerous==0.24
 Jinja2==2.8
 MarkupSafe==0.23
-nltk==3.0.5
+nltk==3.4.5
 python-dateutil==2.5.0
 requests==2.12.3
 six==1.10.0
