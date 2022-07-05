@@ -8,6 +8,6 @@ python-dateutil==2.5.0
 requests==2.12.3
 six==1.10.0
 textblob==0.10.0
-ujson==1.35
+ujson==5.4.0
 urllib3==1.19.1
 Werkzeug==0.10.4
